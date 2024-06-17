@@ -1,0 +1,75 @@
+﻿@page "/"
+@using BlazorApp1.Services
+@using BlazorApp1.Entities
+@inject IAccountService AccountService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<link rel="stylesheet" href="css/login.css">
+<h3>Login</h3>
+
+<div class="login-container">
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input id="username" class="form-control" @bind="username" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input id="password" type="password" class="form-control" @bind="password" />
+    </div>
+    <button class="btn btn-primary" @onclick="LoginAsync">Login</button>
+    <p>@error</p>
+</div>
+
+@code {
+    private string username;
+    private string password;
+    private string error;
+
+    private async Task LoginAsync()
+    {
+        try
+        {
+            bool isAuthenticated = await AccountService.AuthenticateAsync(username, password);
+            if (isAuthenticated)
+            {
+                var account = await AccountService.GetAccountByUsernameAsync(username);
+                RedirectToRolePage(account.AccountRole, account.AccountId);
+            }
+            else
+            {
+                error = "Invalid username or password.";
+            }
+        }
+        catch (Exception ex)
+        {
+            error = $"Error: {ex.Message}";
+        }
+    }
+
+    private void RedirectToRolePage(Role accountRole, int accountId)
+    {
+        switch (accountRole)
+        {
+            case Role.Student:
+                Navigation.NavigateTo($"/student/{accountId}");
+                break;
+            case Role.Teacher:
+                Navigation.NavigateTo($"/teacher/{accountId}");
+                break;
+            case Role.Cleaner:
+                Navigation.NavigateTo($"/cleaner/{accountId}");
+                break;
+            case Role.BoardingMember:
+                Navigation.NavigateTo($"/boarding-member/{accountId}");
+                break;
+            case Role.Admin:
+                Navigation.NavigateTo($"/admin/{accountId}");
+                break;
+            default:
+                Navigation.NavigateTo("/");
+                break;
+        }
+    }
+}
+

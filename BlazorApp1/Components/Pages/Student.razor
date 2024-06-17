@@ -1,0 +1,53 @@
+﻿@page "/student/{id:int}"
+
+@using BlazorApp1.Services;
+@using BlazorApp1.Models;
+
+
+@inject IRepositoryService RepositoryService;
+<link rel="stylesheet" href="css/styles.css">
+
+<h3>Enrolled Courses</h3>
+
+@if (courses == null)
+{
+    <p>Loading...</p>
+}
+else if (courses.Count == 0)
+{
+    <p>No courses found for this student.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Course Title</th>
+                <th>Oral Mark</th>
+                <th>Writing Mark</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in courses)
+            {
+                <tr>
+                    <td>@course.CourseTitle</td>
+                    <td>@course.OralMark</td>
+                    <td>@course.WritingMark</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<StudentCoursesDto> courses;
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        courses = await RepositoryService.GetStudentCoursesAsync(id); 
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/cleaner/{id:int}"
+
+@using BlazorApp1.Services;
+@using BlazorApp1.Models;
+
+@inject IRepositoryService RepositoryService;
+<link rel="stylesheet" href="css\styles.css">
+
+
+<h3>Cleaning Working Schedule</h3>
+
+
+@if (cleanerSchedule == null)
+{
+    <p>Loading...</p>
+}
+else if (cleanerSchedule.Count == 0)
+{
+    <p>No schedule found for this cleaner.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var schedule in cleanerSchedule)
+            {
+                <tr>
+                    <td>@schedule.Day</td>
+                    <td>@schedule.StartTime</td>
+                    <td>@schedule.EndTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<CleanerScheduleDto> cleanerSchedule;
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        cleanerSchedule = await RepositoryService.GetCleanerScheduleAsync(id);
+    }
+}

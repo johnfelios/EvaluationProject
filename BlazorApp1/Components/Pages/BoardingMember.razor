@@ -1,0 +1,75 @@
+﻿@page "/boarding-member/{id:int}"
+
+@using BlazorApp1.Services;
+@using BlazorApp1.Models;
+@inject IRepositoryService RepositoryService;
+
+<link rel="stylesheet" href="css/boardingMember.css">
+<h3>Boarding Member Page</h3>
+
+<div class="table-container">
+    <div class="table-wrapper">
+        <h4>Teachers</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Wage</th>
+                    <th>StartDate</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var teacher in teachers)
+                {
+                    <tr>
+                        <td>@teacher.FirstName</td>
+                        <td>@teacher.LastName</td>
+                        <td>@teacher.Age</td>
+                        <td>@teacher.Wage</td>
+                        <td>@teacher.StartDate.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-wrapper">
+        <h4>Students</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Start Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in students)
+                {
+                    <tr>
+                        <td>@student.FirstName</td>
+                        <td>@student.LastName</td>
+                        <td>@student.Age</td>
+                        <td>@student.StartDate.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    List<TeacherViewModel> teachers;
+    List<StudentViewModel> students;
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        teachers = await RepositoryService.GetAllTeachersAsync();
+        students = await RepositoryService.GetAllStudentsAsync();
+    }
+}
