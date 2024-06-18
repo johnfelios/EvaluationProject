@@ -9,5 +9,7 @@ namespace BlazorApp1.Services
         Task<List<CleanerScheduleDto>> GetCleanerScheduleAsync(int accountId);
         Task<List<TeacherViewModel>> GetAllTeachersAsync();
         Task<List<StudentViewModel>> GetAllStudentsAsync();
+        Task<List<BoardingMemberViewModel>> GetAllBoardingMembersAsync();
+        Task<List<CleanerViewModel>> GetAllCleanersAsync();
     }
 }

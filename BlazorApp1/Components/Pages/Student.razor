@@ -19,25 +19,30 @@ else if (courses.Count == 0)
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Course Title</th>
-                <th>Oral Mark</th>
-                <th>Writing Mark</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var course in courses)
-            {
+    
+<div class="table-container">
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@course.CourseTitle</td>
-                    <td>@course.OralMark</td>
-                    <td>@course.WritingMark</td>
+                    <th>Course Title</th>
+                    <th>Oral Mark</th>
+                    <th>Writing Mark</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var course in courses)
+                {
+                    <tr>
+                        <td>@course.CourseTitle</td>
+                        <td>@course.OralMark</td>
+                        <td>@course.WritingMark</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+ </div>
 }
 
 @code {

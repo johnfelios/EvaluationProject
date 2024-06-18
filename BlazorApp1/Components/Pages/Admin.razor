@@ -1,3 +1,100 @@
-@page "/admin"
-<h3>Admin Page</h3>
-<p>Welcome, Admin!</p>
+﻿@page "/admin/{id:int}"
+
+@using BlazorApp1.Services;
+@using BlazorApp1.Models;
+@inject IRepositoryService RepositoryService;
+
+<link rel="stylesheet" href="css/styles.css">
+<h3>Admin  Page</h3>
+
+<div class="table-container">
+    <div class="table-wrapper">
+        <h4>Employees and Students</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>User Type</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Wage</th>
+                    <th>StartDate</th>
+                    <th>Position</th>
+                    <th>YearsOfService</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var teacher in teachers)
+                {
+                    <tr>
+                        <td>Teacher</td>
+                        <td>@teacher.FirstName</td>
+                        <td>@teacher.LastName</td>
+                        <td>@teacher.Age</td>
+                        <td>@teacher.Wage</td>
+                        <td>@teacher.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                }
+                @foreach (var student in students)
+                {
+                    <tr>
+                        <td>Student</td>
+                        <td>@student.FirstName</td>
+                        <td>@student.LastName</td>
+                        <td>@student.Age</td>
+                        <td>-</td>
+                        <td>@student.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                }
+                @foreach (var cleaner in cleaners)
+                {
+                    <tr>
+                        <td>Cleaner</td>
+                        <td>@cleaner.FirstName</td>
+                        <td>@cleaner.LastName</td>
+                        <td>@cleaner.Age</td>
+                        <td>@cleaner.Wage</td>
+                        <td>@cleaner.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                }
+                @foreach (var boardingMember in boardingMembers)
+                {
+                    <tr>
+                        <td>Boarding Member</td>
+                        <td>@boardingMember.FirstName</td>
+                        <td>@boardingMember.LastName</td>
+                        <td>@boardingMember.Age</td>
+                        <td>@boardingMember.Wage</td>
+                        <td>@boardingMember.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>@boardingMember.Position</td>
+                        <td>@boardingMember.YearsOfService</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@code {
+    List<TeacherViewModel> teachers;
+    List<StudentViewModel> students;
+    List<CleanerViewModel> cleaners;
+    List<BoardingMemberViewModel> boardingMembers;
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        teachers = await RepositoryService.GetAllTeachersAsync();
+        students = await RepositoryService.GetAllStudentsAsync();
+        cleaners = await RepositoryService.GetAllCleanersAsync();
+        boardingMembers = await RepositoryService.GetAllBoardingMembersAsync();
+    }
+}

@@ -110,8 +110,39 @@ namespace BlazorApp1.Services
                 .ToListAsync();
 
             return teachers;
+        }
 
+        public async Task<List<BoardingMemberViewModel>> GetAllBoardingMembersAsync()
+        {
+            var boardingMembers = await _context.BoardingMembers
+                .Select(bm => new BoardingMemberViewModel
+                {
+                    FirstName = bm.FirstName,
+                    LastName = bm.LastName,
+                    Age = bm.Age,
+                    Wage = bm.Wage,
+                    StartDate = bm.StartDate,
+                    Position = bm.Position,
+                    YearsOfService = bm.YearsOfService
+                })
+                .ToListAsync();
 
+            return boardingMembers;
+        }
+
+        public async Task<List<CleanerViewModel>> GetAllCleanersAsync()
+        {
+            var cleaners = await _context.Cleaners
+                .Select(c => new CleanerViewModel
+                { FirstName = c.FirstName,
+                LastName = c.LastName,
+                Age = c.Age,
+                Wage = c.Wage,
+                StartDate = c.StartDate
+                })
+                .ToListAsync ();
+
+            return cleaners;
         }
     }
 }

@@ -18,27 +18,31 @@ else if (teacherSchedule.Count == 0)
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Course Title</th>
-                <th>Day</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var schedule in teacherSchedule)
-            {
+<div class="table-container">
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@schedule.CourseTitle</td>
-                    <td>@schedule.Day</td>
-                    <td>@schedule.StartTime</td>
-                    <td>@schedule.EndTime</td>
+                    <th>Course Title</th>
+                    <th>Day</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var schedule in teacherSchedule)
+                {
+                    <tr>
+                        <td>@schedule.CourseTitle</td>
+                        <td>@schedule.Day</td>
+                        <td>@schedule.StartTime</td>
+                        <td>@schedule.EndTime</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    </div>
 }
 
 @code {
