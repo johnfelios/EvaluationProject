@@ -3,9 +3,20 @@
 @using BlazorApp1.Services;
 @using BlazorApp1.Models;
 
-
+@inherits BaseComponent
+@inject IAppState AppState
+@inject NavigationManager Navigation;
 @inject IRepositoryService RepositoryService;
+
 <link rel="stylesheet" href="css/styles.css">
+
+<div class="header">
+    <div class="user-info">
+        <span>@($"Username:{AppState.Username}")</span>
+        <span>@("Student")</span>
+    </div>
+    <button class="logout-button" @onclick="Logout">Logout</button>
+</div>
 
 <h3>Enrolled Courses</h3>
 

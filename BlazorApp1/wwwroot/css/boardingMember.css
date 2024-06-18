@@ -1,4 +1,42 @@
-﻿.table-container {
+﻿.header {
+    background-color: #084260;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-left: -35px;
+    margin-right: -35px;
+}
+
+    .header button {
+        background-color: #031017;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+        .header button:hover {
+            background-color: #de0f0f;
+        }
+
+.user-info {
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+    .user-info span {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+
+.table-container {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;

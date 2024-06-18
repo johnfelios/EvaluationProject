@@ -1,12 +1,7 @@
 using BlazorApp1.Components;
 using BlazorApp1.Data;
 using BlazorApp1.Services;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +23,8 @@ builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 //Mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+//DI for username save through session
+builder.Services.AddSingleton<IAppState, AppState>();
 
 
 var app = builder.Build();

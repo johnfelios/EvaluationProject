@@ -1,10 +1,20 @@
 ﻿@page "/boarding-member/{id:int}"
 
+@inherits BaseComponent
+@inject IAppState AppState
 @using BlazorApp1.Services;
 @using BlazorApp1.Models;
 @inject IRepositoryService RepositoryService;
 
 <link rel="stylesheet" href="css/boardingMember.css">
+
+<div class="header">
+    <div class="user-info">
+        <span>@($"Username:{AppState.Username}")</span>
+        <span>@("Boarding Member")</span>
+    </div>
+    <button class="logout-button" @onclick="Logout">Logout</button>
+</div>
 <h3>Boarding Member Page</h3>
 
 <div class="table-container">

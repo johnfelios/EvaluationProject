@@ -2,10 +2,19 @@
 
 @using BlazorApp1.Services;
 @using BlazorApp1.Models;
+@inherits BaseComponent
+@inject IAppState AppState
 
 @inject IRepositoryService RepositoryService;
 <link rel="stylesheet" href="css/styles.css">
 
+<div class="header">
+    <div class="user-info">
+        <span>@($"Username:{AppState.Username}")</span>
+        <span>@("Teacher")</span>
+    </div>
+    <button class="logout-button" @onclick="Logout">Logout</button>
+</div>
 <h3>Teaching Schedule</h3>
 
 @if (teacherSchedule == null)
