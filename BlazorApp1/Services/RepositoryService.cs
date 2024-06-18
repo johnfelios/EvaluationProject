@@ -4,19 +4,16 @@ using BlazorApp1.Data;
 using BlazorApp1.Entities;
 using BlazorApp1.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Principal;
 
 namespace BlazorApp1.Services
 {
     public class RepositoryService : IRepositoryService
     {
         private readonly MyAppContext _context;
-        private readonly IMapper _mapper;
-
-        public RepositoryService(MyAppContext context, IMapper mapper)
+ 
+        public RepositoryService(MyAppContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
 
@@ -56,6 +53,7 @@ namespace BlazorApp1.Services
 
             return teacherSchedules;
         }
+
 
         public async Task<List<CleanerScheduleDto>> GetCleanerScheduleAsync(int accountId)
         {
@@ -155,6 +153,7 @@ namespace BlazorApp1.Services
             return teachers;
         }
 
+
         public async Task<List<BoardingMemberViewModel>> GetAllBoardingMembersAsync()
         {
             var boardingMembers = await _context.BoardingMembers
@@ -194,6 +193,7 @@ namespace BlazorApp1.Services
 
         }
 
+
         public async Task<List<CleanerViewModel>> GetAllCleanersAsync()
         {
             var cleaners = await _context.Cleaners
@@ -228,6 +228,7 @@ namespace BlazorApp1.Services
             return cleaners;
         }
 
+
         public async Task AddCourseAsync(CourseViewModel courseModel)
         {
             var course = new Entities.Course
@@ -238,6 +239,7 @@ namespace BlazorApp1.Services
 
             await _context.SaveChangesAsync();
         }
+
 
         public async Task AddStudentAsync(StudentViewModel studentModel)
         {
@@ -263,6 +265,7 @@ namespace BlazorApp1.Services
 
             await _context.SaveChangesAsync();
         }
+
 
         public async Task UpdateStudentAsync(StudentViewModel studentModel)
         {
@@ -313,6 +316,7 @@ namespace BlazorApp1.Services
             }
         }
 
+
         public async Task AddCleanerAsync(CleanerViewModel cleanerModel)
         {
             var account = new Account
@@ -338,6 +342,7 @@ namespace BlazorApp1.Services
 
             await _context.SaveChangesAsync();
         }
+
 
         public async Task UpdateCleanerAsync(CleanerViewModel cleanerModel)
         {
@@ -365,6 +370,7 @@ namespace BlazorApp1.Services
                 throw new ArgumentException("Cleaner not found.");
             }
         }
+
 
         public async Task RemoveCleanerAsync(CleanerViewModel cleanerModel)
         {
@@ -416,6 +422,7 @@ namespace BlazorApp1.Services
             await _context.SaveChangesAsync();
         }
 
+
         public async Task UpdateBoardingMemberAsync(BoardingMemberViewModel boardingMemberModel)
         {
 
@@ -443,6 +450,7 @@ namespace BlazorApp1.Services
             }
         }
 
+
         public async Task RemoveBoardingMemberAsync(BoardingMemberViewModel boardingMemberModel)
         {
             var boardingMember = await _context.BoardingMembers.
@@ -463,6 +471,7 @@ namespace BlazorApp1.Services
                 await _context.SaveChangesAsync();
             }
         }
+
 
         public async Task UpdateTeacherAsync(TeacherViewModel teacherModel)
         {
@@ -491,6 +500,7 @@ namespace BlazorApp1.Services
             }
         }
 
+
         public async Task RemoveTeacherAsync(TeacherViewModel teacherModel)
         {
             var teacher = await _context.Teachers.
@@ -513,9 +523,6 @@ namespace BlazorApp1.Services
         }
 
 
-
-    }
-
-    
+    }  
 }
 

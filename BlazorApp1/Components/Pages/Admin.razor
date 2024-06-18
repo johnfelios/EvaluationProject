@@ -17,8 +17,6 @@
     <button class="logout-button" @onclick="Logout">Logout</button>
 </div>
 
-<h3>Admin Page</h3>
-
 <div class="table-container">
     <div class="table-wrapper">
         <h4>Employees and Students</h4>
@@ -160,10 +158,12 @@
 
     private object currentEntity;
     private bool showAddEditForm;
+
     private object newlyAddedEntity;
     private string newlyAddedType;
     private object newlyUpdatedEntity;
     private string newlyUpdatedType;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -174,10 +174,6 @@
         cleaners = await RepositoryService.GetAllCleanersAsync();
         boardingMembers = await RepositoryService.GetAllBoardingMembersAsync();
     }
-
-
-
-
 
 
     private void ShowAddStudentForm()
@@ -286,6 +282,8 @@
                 await RepositoryService.AddStudentAsync(student);
                 newlyAddedEntity = student;
                 newlyAddedType = "Student";
+             
+                
 
             }
             else
@@ -342,8 +340,8 @@
         }
 
         showAddEditForm = false;
-        currentEntity = null;
     }
+
 
     private void Cancel()
     {

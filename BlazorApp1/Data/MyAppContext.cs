@@ -43,12 +43,6 @@ namespace BlazorApp1.Data
                 .WithMany(c => c.WorkingTimeSlots)
                 .HasForeignKey(clts => clts.CleanerAccountId);
 
-            //modelBuilder.Entity<CleanerTimeSlot>()
-            //    .HasOne(clts => clts.TimeSlot)
-            //    .WithMany()
-            //    .HasForeignKey(clts => clts.TimeSlotId);
-
-
             modelBuilder.Entity<Teacher>()
                 .HasKey(t => t.Id);
 
@@ -63,13 +57,7 @@ namespace BlazorApp1.Data
 
             modelBuilder.Entity<StudentCourse>()
                 .HasKey(sc => sc.Id);
-
-            //modelBuilder.Entity<StudentCourse>()
-            //  .HasOne(sc => sc.Course)
-            //  .WithMany() 
-            //  .HasForeignKey(sc => sc.CourseId);
-            
-            
+                        
             base.OnModelCreating(modelBuilder);
 
         }

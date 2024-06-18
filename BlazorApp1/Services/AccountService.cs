@@ -13,6 +13,7 @@ namespace BlazorApp1.Services
             _context = context;    
         }
 
+        //Login Simple Authentication
         public async Task<bool> AuthenticateAsync(string username, string password)
         {
 

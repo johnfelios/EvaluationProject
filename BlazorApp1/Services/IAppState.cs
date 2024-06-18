@@ -4,6 +4,6 @@
     {
         string Username { get; set; }
         int AccountId { get; set; }
-        void ClearUsername();
+        void ClearAppState();
     }
 }
