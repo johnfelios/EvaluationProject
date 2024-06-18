@@ -11,19 +11,13 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 
-// Configure DbContext
+//DbContext
 builder.Services.AddDbContext<MyAppContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//DI
+//dependency injection
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRepositoryService, RepositoryService>();
-
-
-//Mapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-//DI for username save through session
 builder.Services.AddSingleton<IAppState, AppState>();
 
 
