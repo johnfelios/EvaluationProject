@@ -22,6 +22,7 @@ namespace BlazorApp1.Services
         Task RemoveBoardingMemberAsync(BoardingMemberViewModel boardingMemberModel);
         Task UpdateTeacherAsync(TeacherViewModel teacherModel);
         Task RemoveTeacherAsync(TeacherViewModel teacherModel);
+        Task<List<CourseViewModel>> GetAllCoursesAsync();
         Task AddCourseAsync(CourseViewModel courseModel);
 
     }

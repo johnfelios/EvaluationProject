@@ -33,6 +33,20 @@ namespace BlazorApp1.Services
             return courses;
         }
 
+        public async Task<List<CourseViewModel>> GetAllCoursesAsync()
+        {
+
+            var courses = await _context.Courses
+                .Select(c => new CourseViewModel
+                {
+                    CourseTitle = c.CourseTitle,
+                    TeacherAccountId = c.TeacherAccountId,
+                })
+             .ToListAsync();
+
+            return courses;
+        }
+
 
         public async Task<List<TeacherScheduleDto>> GetTeacherScheduleAsync(int accountId)
         {
@@ -233,8 +247,10 @@ namespace BlazorApp1.Services
         {
             var course = new Entities.Course
             {
-                CourseTitle = courseModel.CourseTitle
+                CourseTitle = courseModel.CourseTitle,
+                TeacherAccountId = courseModel.TeacherAccountId
             };
+
             await _context.Courses.AddAsync(course);
 
             await _context.SaveChangesAsync();

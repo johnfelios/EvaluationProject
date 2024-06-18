@@ -1,6 +1,5 @@
 ﻿@using BlazorApp1.Models
 @using BlazorApp1.Services;
-
 @inject IRepositoryService RepositoryService;
 
 <EditForm Model="Course" OnValidSubmit="HandleValidSubmit">
@@ -11,15 +10,31 @@
         <label>Course Title:</label>
         <InputText @bind-Value="Course.CourseTitle" class="form-control" />
     </div>
+
+    <div class="form-group">
+        <label>Teacher:</label>
+        <InputSelect @bind-Value="Course.TeacherAccountId" class="form-control">
+            @foreach (var teacher in Teachers)
+            {
+                <option value="@teacher.AccountId">@teacher.LastName</option>
+            }
+        </InputSelect>
+    </div>
 </EditForm>
 
 @code {
     [Parameter]
     public CourseViewModel Course { get; set; }
-  
-    private async void HandleValidSubmit()
+
+    private List<TeacherViewModel> Teachers { get; set; } = new List<TeacherViewModel>();
+
+    protected override async Task OnInitializedAsync()
     {
+        Teachers = await RepositoryService.GetAllTeachersAsync(); // Adjust according to your repository method
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Handle submission logic here
     }
 }
-
-

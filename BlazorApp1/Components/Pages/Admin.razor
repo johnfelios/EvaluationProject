@@ -152,6 +152,7 @@
     List<StudentViewModel> students;
     List<CleanerViewModel> cleaners;
     List<BoardingMemberViewModel> boardingMembers;
+    List<CourseViewModel> courses;
 
     [Parameter]
     public int id { get; set; }
@@ -173,6 +174,7 @@
         students = await RepositoryService.GetAllStudentsAsync();
         cleaners = await RepositoryService.GetAllCleanersAsync();
         boardingMembers = await RepositoryService.GetAllBoardingMembersAsync();
+        courses = await RepositoryService.GetAllCoursesAsync();
     }
 
 
@@ -336,6 +338,13 @@
                 await RepositoryService.UpdateBoardingMemberAsync(boardingMember);
                 newlyUpdatedEntity = boardingMember;
                 newlyUpdatedType = "BoardingMember";
+            }
+        }
+        else if (currentEntity is CourseViewModel course)
+        {
+            if (!courses.Contains(course))
+            {
+                await RepositoryService.AddCourseAsync(course);
             }
         }
 
