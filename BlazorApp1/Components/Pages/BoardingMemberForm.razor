@@ -1,0 +1,66 @@
+﻿@using BlazorApp1.Models;
+@using BlazorApp1.Entities;
+@using BlazorApp1.Services;
+
+@inject IRepositoryService RepositoryService;
+
+<EditForm Model="BoardingMember" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>First Name:</label>
+        <InputText @bind-Value="BoardingMember.FirstName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Last Name:</label>
+        <InputText @bind-Value="BoardingMember.LastName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Age:</label>
+        <InputNumber @bind-Value="BoardingMember.Age" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Wage:</label>
+        <InputNumber @bind-Value="BoardingMember.Wage" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Start Date:</label>
+        <InputDate @bind-Value="BoardingMember.StartDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Position:</label>
+        <InputSelect @bind-Value="BoardingMember.Position" class="form-control">
+            @foreach (var position in Enum.GetValues(typeof(BoardMemberPosition)).Cast<BoardMemberPosition>())
+            {
+                <option value="@position">@position</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label>Years of Service:</label>
+        <InputNumber @bind-Value="BoardingMember.YearsOfService" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Username:</label>
+        <InputText @bind-Value="BoardingMember.Username" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Password:</label>
+        <InputText @bind-Value="BoardingMember.Password" class="form-control" />
+    </div>
+  
+
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public BoardingMemberViewModel BoardingMember { get; set; }
+  
+    private async void HandleValidSubmit()
+    {
+    }
+}
+
+

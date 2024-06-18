@@ -3,33 +3,37 @@
 
 @inject IRepositoryService RepositoryService;
 
-<EditForm Model="Student" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="Cleaner" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group">
         <label>First Name:</label>
-        <InputText @bind-Value="Student.FirstName" class="form-control" />
+        <InputText @bind-Value="Cleaner.FirstName" class="form-control" />
     </div>
     <div class="form-group">
         <label>Last Name:</label>
-        <InputText @bind-Value="Student.LastName" class="form-control" />
+        <InputText @bind-Value="Cleaner.LastName" class="form-control" />
     </div>
     <div class="form-group">
         <label>Age:</label>
-        <InputNumber @bind-Value="Student.Age" class="form-control" />
+        <InputNumber @bind-Value="Cleaner.Age" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Wage:</label>
+        <InputNumber @bind-Value="Cleaner.Wage" class="form-control" />
     </div>
     <div class="form-group">
         <label>Start Date:</label>
-        <InputDate @bind-Value="Student.StartDate" class="form-control" />
+        <InputDate @bind-Value="Cleaner.StartDate" class="form-control" />
     </div>
     <div class="form-group">
         <label>Username:</label>
-        <InputText @bind-Value="Student.Username" class="form-control" />
+        <InputText @bind-Value="Cleaner.Username" class="form-control" />
     </div>
     <div class="form-group">
         <label>Password:</label>
-        <InputText @bind-Value="Student.Password" class="form-control" />
+        <InputText @bind-Value="Cleaner.Password" class="form-control" />
     </div>
   
 
@@ -38,7 +42,7 @@
 
 @code {
     [Parameter]
-    public StudentViewModel Student { get; set; }
+    public CleanerViewModel Cleaner { get; set; }
   
     private async void HandleValidSubmit()
     {

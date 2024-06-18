@@ -28,7 +28,7 @@
             <tbody>
                 @foreach (var teacher in teachers)
                 {
-                    <tr>
+                    <tr class="@((ReferenceEquals(teacher, newlyAddedEntity) && newlyAddedType == "Teacher") ? "newly-added" : (ReferenceEquals(teacher, newlyUpdatedEntity) && newlyUpdatedType == "Teacher") ? "newly-updated" : "")">
                         <td>Teacher</td>
                         <td>@teacher.FirstName</td>
                         <td>@teacher.LastName</td>
@@ -38,14 +38,14 @@
                         <td>-</td>
                         <td>-</td>
                         <td>
-                            <button class="button-primary">Edit</button>
-                            <button class="button-danger">Delete</button>
+                            <button class="button-primary" @onclick="() => EditTeacher(teacher)">Edit</button>
+                            <button class="button-danger" @onclick="() => DeleteTeacher(teacher)">Delete</button>
                         </td>
                     </tr>
                 }
                 @foreach (var student in students)
                 {
-                    <tr class="@((ReferenceEquals(student, newlyAddedEntity) && newlyAddedType == "Student") ? "newly-added" : "")">
+                    <tr class="@((ReferenceEquals(student, newlyAddedEntity) && newlyAddedType == "Student") ? "newly-added" : (ReferenceEquals(student, newlyUpdatedEntity) && newlyUpdatedType == "Student") ? "newly-updated" : "")">
                         <td>Student</td>
                         <td>@student.FirstName</td>
                         <td>@student.LastName</td>
@@ -55,7 +55,7 @@
                         <td>-</td>
                         <td>-</td>
                         <td>
-                            <button class="button-primary">Edit</button>
+                            <button class="button-primary" @onclick="() => EditStudent(student)">Edit</button>
                             <button class="button-danger" @onclick="() => DeleteStudent(student)">Delete</button>
                         </td>
                     </tr>
@@ -63,7 +63,8 @@
 
                 @foreach (var cleaner in cleaners)
                 {
-                    <tr>
+                    
+                    <tr class="@((ReferenceEquals(cleaner, newlyAddedEntity) && newlyAddedType == "Cleaner") ? "newly-added" : (ReferenceEquals(cleaner, newlyUpdatedEntity) && newlyUpdatedType == "Cleaner") ? "newly-updated" : "")">
                         <td>Cleaner</td>
                         <td>@cleaner.FirstName</td>
                         <td>@cleaner.LastName</td>
@@ -73,14 +74,14 @@
                         <td>-</td>
                         <td>-</td>
                         <td>
-                            <button class="button-primary">Edit</button>
-                            <button class="button-danger">Delete </button>
+                            <button class="button-primary" @onclick="() => EditCleaner(cleaner)">Edit</button>
+                            <button class="button-danger" @onclick="() => DeleteCleaner(cleaner)">Delete</button>
                         </td>
                     </tr>
                 }
                 @foreach (var boardingMember in boardingMembers)
                 {
-                    <tr>
+                    <tr class="@((ReferenceEquals(boardingMember, newlyAddedEntity) && newlyAddedType == "BoardingMember") ? "newly-added" : (ReferenceEquals(boardingMember, newlyUpdatedEntity) && newlyUpdatedType == "BoardingMember") ? "newly-updated" : "")">
                         <td>Boarding Member</td>
                         <td>@boardingMember.FirstName</td>
                         <td>@boardingMember.LastName</td>
@@ -90,8 +91,8 @@
                         <td>@boardingMember.Position</td>
                         <td>@boardingMember.YearsOfService</td>
                         <td>
-                            <button class="button-primary">Edit</button>
-                            <button class="button-danger">Delete</button>
+                            <button class="button-primary" @onclick="() => EditBoardingMember(boardingMember)">Edit</button>
+                            <button class="button-danger" @onclick="() => DeleteBoardingMember(boardingMember)">Delete</button>
                         </td>
                     </tr>
                 }
@@ -100,7 +101,7 @@
     </div>
 </div>
 <div class="form-container">
-  <button class="btn btn-primary" @onclick="ShowAddStudentForm">Add Student</button>
+        <button class="btn btn-primary" @onclick="ShowAddStudentForm">Add Student</button>
         <button class="btn btn-primary" @onclick="ShowAddCourseForm">Add Course</button>
         <button class="btn btn-primary" @onclick="ShowAddCleanerForm">Add Cleaner</button>
         <button class="btn btn-primary" @onclick="ShowAddBoardingMemberForm">Add Boarding Member</button>
@@ -113,21 +114,25 @@
 
                 @if (currentEntity is StudentViewModel)
                 {
-                <StudentForm Student="(StudentViewModel)currentEntity" OnStudentFormSubmit="HandleStudentFormSubmit" />
+                <StudentForm Student="(StudentViewModel)currentEntity"/>
                 }
                 else if (currentEntity is TeacherViewModel)
                 {
-                    <TeacherForm Teacher="(TeacherViewModel)currentEntity" />
+                <TeacherForm Teacher="(TeacherViewModel)currentEntity"/>
                 }
                 else if (currentEntity is CleanerViewModel)
                 {
-                    <CleanerForm Cleaner="(CleanerViewModel)currentEntity" />
+                <CleanerForm Cleaner="(CleanerViewModel)currentEntity" />
                 }
                 else if (currentEntity is BoardingMemberViewModel)
                 {
-                    <BoardingMemberForm BoardingMember="(BoardingMemberViewModel)currentEntity" />
+                <BoardingMemberForm BoardingMember="(BoardingMemberViewModel)currentEntity"/>
                 }
-
+                else if (currentEntity is CourseViewModel)
+                {
+                    <CourseForm Course="(CourseViewModel)currentEntity" />
+                }
+                <button type="submit" class="btn btn-primary">Save</button>
                 <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
             </EditForm>
         }
@@ -144,9 +149,10 @@
 
     private object currentEntity;
     private bool showAddEditForm;
-
     private object newlyAddedEntity;
     private string newlyAddedType;
+    private object newlyUpdatedEntity;
+    private string newlyUpdatedType;
 
     protected override async Task OnInitializedAsync()
     {
@@ -159,17 +165,13 @@
 
 
 
-    private async Task HandleStudentFormSubmit()
-    {
-        await HandleValidSubmit();
-    }
+
 
     private void ShowAddStudentForm()
     {
         currentEntity = new StudentViewModel();
         showAddEditForm = true;
-        newlyAddedEntity = currentEntity; // Track newly added entity
-        newlyAddedType = "Student";
+
     }
 
     private void ShowAddCourseForm()
@@ -226,6 +228,41 @@
         }
     }
 
+    private async Task DeleteCleaner(CleanerViewModel cleaner)
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this entry?");
+
+        if (confirmed)
+        {
+            await RepositoryService.RemoveCleanerAsync(cleaner);
+            await JSRuntime.InvokeVoidAsync("location.reload");
+
+        }
+    }
+
+    private async Task DeleteTeacher(TeacherViewModel teacher)
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this entry?");
+
+        if (confirmed)
+        {
+            await RepositoryService.RemoveTeacherAsync(teacher);
+            await JSRuntime.InvokeVoidAsync("location.reload");
+
+        }
+    }
+
+    private async Task DeleteBoardingMember(BoardingMemberViewModel boardingMember)
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this entry?");
+
+        if (confirmed)
+        {
+            await RepositoryService.RemoveBoardingMemberAsync(boardingMember);
+            await JSRuntime.InvokeVoidAsync("location.reload");
+
+        }
+    }
     private async Task HandleValidSubmit()
     {
         if (currentEntity is StudentViewModel student)
@@ -233,24 +270,29 @@
             if (!students.Contains(student))
             {
                 students.Add(student);
+                await RepositoryService.AddStudentAsync(student);
+                newlyAddedEntity = student;
+                newlyAddedType = "Student";
 
-               // await RepositoryService.AddStudentAsync(student);
             }
             else
             {
-               // await RepositoryService.UpdateStudentAsync(student);
+                await RepositoryService.UpdateStudentAsync(student);
+                newlyUpdatedEntity = student;
+                newlyUpdatedType = "Student";
             }
         }
         else if (currentEntity is TeacherViewModel teacher)
         {
             if (!teachers.Contains(teacher))
             {
-                teachers.Add(teacher);
-               // await RepositoryService.AddTeacherAsync(teacher);
+              //Not requested 
             }
             else
             {
-               // await RepositoryService.UpdateTeacherAsync(teacher);
+                await RepositoryService.UpdateTeacherAsync(teacher);
+                newlyUpdatedEntity = teacher;
+                newlyUpdatedType = "Teacher";
             }
         }
         else if (currentEntity is CleanerViewModel cleaner)
@@ -258,11 +300,15 @@
             if (!cleaners.Contains(cleaner))
             {
                 cleaners.Add(cleaner);
-               // await RepositoryService.AddCleanerAsync(cleaner);
+                await RepositoryService.AddCleanerAsync(cleaner);
+                newlyAddedEntity = cleaner;
+                newlyAddedType = "Cleaner";
             }
             else
             {
-                //await RepositoryService.UpdateCleanerAsync(cleaner);
+                await RepositoryService.UpdateCleanerAsync(cleaner);
+                newlyUpdatedEntity = cleaner;
+                newlyUpdatedType = "Cleaner";
             }
         }
         else if (currentEntity is BoardingMemberViewModel boardingMember)
@@ -270,11 +316,15 @@
             if (!boardingMembers.Contains(boardingMember))
             {
                 boardingMembers.Add(boardingMember);
-               // await RepositoryService.AddBoardingMemberAsync(boardingMember);
+                await RepositoryService.AddBoardingMemberAsync(boardingMember);
+                newlyAddedEntity = boardingMember;
+                newlyAddedType = "BoardingMember";
             }
             else
             {
-                //await RepositoryService.UpdateBoardingMemberAsync(boardingMember);
+                await RepositoryService.UpdateBoardingMemberAsync(boardingMember);
+                newlyUpdatedEntity = boardingMember;
+                newlyUpdatedType = "BoardingMember";
             }
         }
 

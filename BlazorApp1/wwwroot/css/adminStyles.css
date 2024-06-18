@@ -137,3 +137,6 @@ button {
 .newly-added {
     background-color: lightgreen;
 }
+.newly-updated {
+    background-color: lightblue;
+}

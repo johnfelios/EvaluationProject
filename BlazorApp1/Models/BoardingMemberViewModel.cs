@@ -11,5 +11,12 @@ namespace BlazorApp1.Models
         public DateOnly StartDate { get; set; }
         public BoardMemberPosition Position { get; set; }
         public int YearsOfService { get; set; }
+        public int AccountId { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
+
+   
+
+ 
 }

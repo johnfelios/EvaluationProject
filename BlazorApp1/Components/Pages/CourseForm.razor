@@ -1,0 +1,25 @@
+﻿@using BlazorApp1.Models
+@using BlazorApp1.Services;
+
+@inject IRepositoryService RepositoryService;
+
+<EditForm Model="Course" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Course Title:</label>
+        <InputText @bind-Value="Course.CourseTitle" class="form-control" />
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public CourseViewModel Course { get; set; }
+  
+    private async void HandleValidSubmit()
+    {
+    }
+}
+
+

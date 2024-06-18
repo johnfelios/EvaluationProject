@@ -9,5 +9,9 @@ namespace BlazorApp1.Models
         public int Age { get; set; }
         public int Wage { get; set; }
         public DateOnly StartDate { get; set; }
+        public int AccountId { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+
     }
 }
