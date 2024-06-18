@@ -79,6 +79,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Authorize(AppState.AccountId, id);
+
         teachers = await RepositoryService.GetAllTeachersAsync();
         students = await RepositoryService.GetAllStudentsAsync();
     }

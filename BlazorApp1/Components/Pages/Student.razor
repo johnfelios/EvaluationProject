@@ -63,7 +63,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        
+
+        Authorize(AppState.AccountId,id);
+
         courses = await RepositoryService.GetStudentCoursesAsync(id); 
     }
 }

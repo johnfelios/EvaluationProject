@@ -60,6 +60,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Authorize(AppState.AccountId, id);
         cleanerSchedule = await RepositoryService.GetCleanerScheduleAsync(id);
     }
 }

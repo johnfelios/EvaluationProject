@@ -3,6 +3,7 @@
     public interface IAppState
     {
         string Username { get; set; }
+        int AccountId { get; set; }
         void ClearUsername();
     }
 }

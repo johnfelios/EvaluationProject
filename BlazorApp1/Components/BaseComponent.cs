@@ -13,5 +13,14 @@ namespace BlazorApp1.Components
             AppState.ClearUsername();
             Navigation.NavigateTo("/");
         }
+
+        public void Authorize(int AppStateId,int id)
+        {
+            if (AppStateId != id)
+            {
+
+                Navigation.NavigateTo("/");
+            }
+        }
     }
 }

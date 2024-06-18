@@ -36,6 +36,7 @@
             {
                 var account = await AccountService.GetAccountByUsernameAsync(username);
                 AppState.Username = username;
+                AppState.AccountId = account.AccountId;
                 RedirectToRolePage(account.AccountRole, account.AccountId);
             }
             else
