@@ -1,5 +1,7 @@
-﻿using BlazorApp1.Components.Pages;
+﻿using AutoMapper;
+using BlazorApp1.Components.Pages;
 using BlazorApp1.Data;
+using BlazorApp1.Entities;
 using BlazorApp1.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +10,12 @@ namespace BlazorApp1.Services
     public class RepositoryService : IRepositoryService
     {
         private readonly MyAppContext _context;
+        private readonly IMapper _mapper;
 
-        public RepositoryService(MyAppContext context)
+        public RepositoryService(MyAppContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 
@@ -144,6 +148,52 @@ namespace BlazorApp1.Services
 
             return cleaners;
         }
+
+        public async Task AddStudentAsync(StudentViewModel studentModel, string username, string password)
+        {
+            var account = new Account
+            {
+                Username = username,
+                Password = password
+            };
+            await _context.Accounts.AddAsync(account);
+            await _context.SaveChangesAsync();
+
+
+            var student = new Entities.Student
+            {
+                FirstName = studentModel.FirstName,
+                LastName = studentModel.LastName,
+                Age = studentModel.Age,
+                StartDate = studentModel.StartDate,
+                AccountId = account.AccountId
+            };
+            await _context.Students.AddAsync(student); 
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveStudentAsync(StudentViewModel studentModel)
+        {
+            var student = await _context.Students.
+                FirstOrDefaultAsync(s =>s.FirstName == studentModel.FirstName && s.LastName == studentModel.LastName);
+
+            if (student != null)
+            {
+                var accountId = student.AccountId;
+
+                _context.Students.Remove(student);
+
+                var account = await _context.Accounts.FindAsync(accountId);
+                if (account != null)
+                {
+                    _context.Accounts.Remove(account);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }
 

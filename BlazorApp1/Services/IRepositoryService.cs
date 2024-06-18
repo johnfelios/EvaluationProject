@@ -11,5 +11,7 @@ namespace BlazorApp1.Services
         Task<List<StudentViewModel>> GetAllStudentsAsync();
         Task<List<BoardingMemberViewModel>> GetAllBoardingMembersAsync();
         Task<List<CleanerViewModel>> GetAllCleanersAsync();
+        Task AddStudentAsync(StudentViewModel studentModel, string username, string password);
+        Task RemoveStudentAsync(StudentViewModel studentModel);
     }
 }

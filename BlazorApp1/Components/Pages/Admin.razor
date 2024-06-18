@@ -3,9 +3,10 @@
 @using BlazorApp1.Services;
 @using BlazorApp1.Models;
 @inject IRepositoryService RepositoryService;
+@inject IJSRuntime JSRuntime
 
-<link rel="stylesheet" href="css/styles.css">
-<h3>Admin  Page</h3>
+<link rel="stylesheet" href="css/adminStyles.css">
+<h3>Admin Page</h3>
 
 <div class="table-container">
     <div class="table-wrapper">
@@ -18,9 +19,10 @@
                     <th>Last Name</th>
                     <th>Age</th>
                     <th>Wage</th>
-                    <th>StartDate</th>
+                    <th>Start Date</th>
                     <th>Position</th>
-                    <th>YearsOfService</th>
+                    <th>Years of Service</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,11 +37,15 @@
                         <td>@teacher.StartDate.ToString("yyyy-MM-dd")</td>
                         <td>-</td>
                         <td>-</td>
+                        <td>
+                            <button class="button-primary">Edit</button>
+                            <button class="button-danger">Delete</button>
+                        </td>
                     </tr>
                 }
                 @foreach (var student in students)
                 {
-                    <tr>
+                    <tr class="@((ReferenceEquals(student, newlyAddedEntity) && newlyAddedType == "Student") ? "newly-added" : "")">
                         <td>Student</td>
                         <td>@student.FirstName</td>
                         <td>@student.LastName</td>
@@ -48,8 +54,13 @@
                         <td>@student.StartDate.ToString("yyyy-MM-dd")</td>
                         <td>-</td>
                         <td>-</td>
+                        <td>
+                            <button class="button-primary">Edit</button>
+                            <button class="button-danger" @onclick="() => DeleteStudent(student)">Delete</button>
+                        </td>
                     </tr>
                 }
+
                 @foreach (var cleaner in cleaners)
                 {
                     <tr>
@@ -61,6 +72,10 @@
                         <td>@cleaner.StartDate.ToString("yyyy-MM-dd")</td>
                         <td>-</td>
                         <td>-</td>
+                        <td>
+                            <button class="button-primary">Edit</button>
+                            <button class="button-danger">Delete </button>
+                        </td>
                     </tr>
                 }
                 @foreach (var boardingMember in boardingMembers)
@@ -74,12 +89,48 @@
                         <td>@boardingMember.StartDate.ToString("yyyy-MM-dd")</td>
                         <td>@boardingMember.Position</td>
                         <td>@boardingMember.YearsOfService</td>
+                        <td>
+                            <button class="button-primary">Edit</button>
+                            <button class="button-danger">Delete</button>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+</div>
+<div class="form-container">
+  <button class="btn btn-primary" @onclick="ShowAddStudentForm">Add Student</button>
+        <button class="btn btn-primary" @onclick="ShowAddCourseForm">Add Course</button>
+        <button class="btn btn-primary" @onclick="ShowAddCleanerForm">Add Cleaner</button>
+        <button class="btn btn-primary" @onclick="ShowAddBoardingMemberForm">Add Boarding Member</button>
 
+     @if (showAddEditForm)
+        {
+            <EditForm Model="@currentEntity" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                @if (currentEntity is StudentViewModel)
+                {
+                <StudentForm Student="(StudentViewModel)currentEntity" OnStudentFormSubmit="HandleStudentFormSubmit" />
+                }
+                else if (currentEntity is TeacherViewModel)
+                {
+                    <TeacherForm Teacher="(TeacherViewModel)currentEntity" />
+                }
+                else if (currentEntity is CleanerViewModel)
+                {
+                    <CleanerForm Cleaner="(CleanerViewModel)currentEntity" />
+                }
+                else if (currentEntity is BoardingMemberViewModel)
+                {
+                    <BoardingMemberForm BoardingMember="(BoardingMemberViewModel)currentEntity" />
+                }
+
+                <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+            </EditForm>
+        }
 </div>
 
 @code {
@@ -87,8 +138,15 @@
     List<StudentViewModel> students;
     List<CleanerViewModel> cleaners;
     List<BoardingMemberViewModel> boardingMembers;
+
     [Parameter]
     public int id { get; set; }
+
+    private object currentEntity;
+    private bool showAddEditForm;
+
+    private object newlyAddedEntity;
+    private string newlyAddedType;
 
     protected override async Task OnInitializedAsync()
     {
@@ -97,4 +155,137 @@
         cleaners = await RepositoryService.GetAllCleanersAsync();
         boardingMembers = await RepositoryService.GetAllBoardingMembersAsync();
     }
+
+
+
+
+    private async Task HandleStudentFormSubmit()
+    {
+        await HandleValidSubmit();
+    }
+
+    private void ShowAddStudentForm()
+    {
+        currentEntity = new StudentViewModel();
+        showAddEditForm = true;
+        newlyAddedEntity = currentEntity; // Track newly added entity
+        newlyAddedType = "Student";
+    }
+
+    private void ShowAddCourseForm()
+    {
+        currentEntity = new CourseViewModel();
+        showAddEditForm = true;
+    }
+
+    private void ShowAddCleanerForm()
+    {
+        currentEntity = new CleanerViewModel();
+        showAddEditForm = true;
+    }
+
+    private void ShowAddBoardingMemberForm()
+    {
+        currentEntity = new BoardingMemberViewModel();
+        showAddEditForm = true;
+    }
+
+    private void EditTeacher(TeacherViewModel teacher)
+    {
+        currentEntity = teacher;
+        showAddEditForm = true;
+    }
+
+    private void EditStudent(StudentViewModel student)
+    {
+        currentEntity = student;
+        showAddEditForm = true;
+    }
+
+    private void EditCleaner(CleanerViewModel cleaner)
+    {
+        currentEntity = cleaner;
+        showAddEditForm = true;
+    }
+
+    private void EditBoardingMember(BoardingMemberViewModel boardingMember)
+    {
+        currentEntity = boardingMember;
+        showAddEditForm = true;
+    }
+
+    private async Task DeleteStudent(StudentViewModel student)
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this entry?");
+
+        if (confirmed)
+        {
+            await RepositoryService.RemoveStudentAsync(student);
+            await JSRuntime.InvokeVoidAsync("location.reload");
+
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (currentEntity is StudentViewModel student)
+        {
+            if (!students.Contains(student))
+            {
+                students.Add(student);
+
+               // await RepositoryService.AddStudentAsync(student);
+            }
+            else
+            {
+               // await RepositoryService.UpdateStudentAsync(student);
+            }
+        }
+        else if (currentEntity is TeacherViewModel teacher)
+        {
+            if (!teachers.Contains(teacher))
+            {
+                teachers.Add(teacher);
+               // await RepositoryService.AddTeacherAsync(teacher);
+            }
+            else
+            {
+               // await RepositoryService.UpdateTeacherAsync(teacher);
+            }
+        }
+        else if (currentEntity is CleanerViewModel cleaner)
+        {
+            if (!cleaners.Contains(cleaner))
+            {
+                cleaners.Add(cleaner);
+               // await RepositoryService.AddCleanerAsync(cleaner);
+            }
+            else
+            {
+                //await RepositoryService.UpdateCleanerAsync(cleaner);
+            }
+        }
+        else if (currentEntity is BoardingMemberViewModel boardingMember)
+        {
+            if (!boardingMembers.Contains(boardingMember))
+            {
+                boardingMembers.Add(boardingMember);
+               // await RepositoryService.AddBoardingMemberAsync(boardingMember);
+            }
+            else
+            {
+                //await RepositoryService.UpdateBoardingMemberAsync(boardingMember);
+            }
+        }
+
+        showAddEditForm = false;
+        currentEntity = null;
+    }
+
+    private void Cancel()
+    {
+        showAddEditForm = false;
+        currentEntity = null;
+    }
+
 }
