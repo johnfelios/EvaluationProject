@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BlazorApp1.Components.Pages;
+﻿using BlazorApp1.Components.Pages;
 using BlazorApp1.Data;
 using BlazorApp1.Entities;
 using BlazorApp1.Models;
