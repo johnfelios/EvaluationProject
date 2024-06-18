@@ -284,6 +284,7 @@
                 await RepositoryService.AddStudentAsync(student);
                 newlyAddedEntity = student;
                 newlyAddedType = "Student";
+                StateHasChanged();
 
 
 
@@ -332,12 +333,14 @@
                 await RepositoryService.AddBoardingMemberAsync(boardingMember);
                 newlyAddedEntity = boardingMember;
                 newlyAddedType = "BoardingMember";
+            
             }
             else
             {
                 await RepositoryService.UpdateBoardingMemberAsync(boardingMember);
                 newlyUpdatedEntity = boardingMember;
                 newlyUpdatedType = "BoardingMember";
+            
             }
         }
         else if (currentEntity is CourseViewModel course)
@@ -349,6 +352,7 @@
         }
 
         showAddEditForm = false;
+        StateHasChanged();
     }
     
 
@@ -366,14 +370,7 @@
         return "";
     }
 
-    //Method to Short after Add/Edit so new row can be on top
-    private void SortEntities()
-    {
-        teachers = teachers.OrderByDescending(t => ReferenceEquals(t, newlyAddedEntity) || ReferenceEquals(t, newlyUpdatedEntity)).ToList();
-        students = students.OrderByDescending(s => ReferenceEquals(s, newlyAddedEntity) || ReferenceEquals(s, newlyUpdatedEntity)).ToList();
-        cleaners = cleaners.OrderByDescending(c => ReferenceEquals(c, newlyAddedEntity) || ReferenceEquals(c, newlyUpdatedEntity)).ToList();
-        boardingMembers = boardingMembers.OrderByDescending(b => ReferenceEquals(b, newlyAddedEntity) || ReferenceEquals(b, newlyUpdatedEntity)).ToList();
-    }
+ 
 
 
     private void Cancel()
