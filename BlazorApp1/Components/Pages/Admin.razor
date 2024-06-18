@@ -37,7 +37,7 @@
             <tbody>
                 @foreach (var teacher in teachers)
                 {
-                    <tr class="@((ReferenceEquals(teacher, newlyAddedEntity) && newlyAddedType == "Teacher") ? "newly-added" : (ReferenceEquals(teacher, newlyUpdatedEntity) && newlyUpdatedType == "Teacher") ? "newly-updated" : "")">
+                    <tr class="@GetRowClass(teacher, "Teacher")">
                         <td>Teacher</td>
                         <td>@teacher.FirstName</td>
                         <td>@teacher.LastName</td>
@@ -54,7 +54,7 @@
                 }
                 @foreach (var student in students)
                 {
-                    <tr class="@((ReferenceEquals(student, newlyAddedEntity) && newlyAddedType == "Student") ? "newly-added" : (ReferenceEquals(student, newlyUpdatedEntity) && newlyUpdatedType == "Student") ? "newly-updated" : "")">
+                    <tr class="@GetRowClass(student, "Student")">
                         <td>Student</td>
                         <td>@student.FirstName</td>
                         <td>@student.LastName</td>
@@ -72,8 +72,8 @@
 
                 @foreach (var cleaner in cleaners)
                 {
-                    
-                    <tr class="@((ReferenceEquals(cleaner, newlyAddedEntity) && newlyAddedType == "Cleaner") ? "newly-added" : (ReferenceEquals(cleaner, newlyUpdatedEntity) && newlyUpdatedType == "Cleaner") ? "newly-updated" : "")">
+
+                    <tr class="@GetRowClass(cleaner, "Cleaner")">
                         <td>Cleaner</td>
                         <td>@cleaner.FirstName</td>
                         <td>@cleaner.LastName</td>
@@ -90,7 +90,7 @@
                 }
                 @foreach (var boardingMember in boardingMembers)
                 {
-                    <tr class="@((ReferenceEquals(boardingMember, newlyAddedEntity) && newlyAddedType == "BoardingMember") ? "newly-added" : (ReferenceEquals(boardingMember, newlyUpdatedEntity) && newlyUpdatedType == "BoardingMember") ? "newly-updated" : "")">
+                    <tr class="@GetRowClass(boardingMember, "BoardingMember")">
                         <td>Boarding Member</td>
                         <td>@boardingMember.FirstName</td>
                         <td>@boardingMember.LastName</td>
@@ -282,8 +282,8 @@
                 await RepositoryService.AddStudentAsync(student);
                 newlyAddedEntity = student;
                 newlyAddedType = "Student";
-             
-                
+
+
 
             }
             else
@@ -341,6 +341,30 @@
 
         showAddEditForm = false;
     }
+    
+
+    //Method to get the .css backround styling for New and Edited Rows
+    private string GetRowClass(object entity, string entityType)
+    {
+        if (ReferenceEquals(entity, newlyAddedEntity) && newlyAddedType == entityType)
+        {
+            return "newly-added";
+        }
+        else if (ReferenceEquals(entity, newlyUpdatedEntity) && newlyUpdatedType == entityType)
+        {
+            return "newly-updated";
+        }
+        return "";
+    }
+
+    //Method to Short after Add/Edit so new row can be on top
+    private void SortEntities()
+    {
+        teachers = teachers.OrderByDescending(t => ReferenceEquals(t, newlyAddedEntity) || ReferenceEquals(t, newlyUpdatedEntity)).ToList();
+        students = students.OrderByDescending(s => ReferenceEquals(s, newlyAddedEntity) || ReferenceEquals(s, newlyUpdatedEntity)).ToList();
+        cleaners = cleaners.OrderByDescending(c => ReferenceEquals(c, newlyAddedEntity) || ReferenceEquals(c, newlyUpdatedEntity)).ToList();
+        boardingMembers = boardingMembers.OrderByDescending(b => ReferenceEquals(b, newlyAddedEntity) || ReferenceEquals(b, newlyUpdatedEntity)).ToList();
+    }
 
 
     private void Cancel()
@@ -348,5 +372,4 @@
         showAddEditForm = false;
         currentEntity = null;
     }
-
 }
