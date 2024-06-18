@@ -21,7 +21,7 @@ namespace BlazorApp1.Services
             return account != null;
         }
 
-        public async Task<Account> GetAccountByUsernameAsync(string username)
+        public async Task<Account?> GetAccountByUsernameAsync(string username)
         {
             return await _context.Accounts.FirstOrDefaultAsync(a => a.Username == username);
         }
